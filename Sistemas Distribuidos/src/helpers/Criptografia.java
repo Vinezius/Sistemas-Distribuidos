@@ -19,7 +19,7 @@ public class Criptografia {
         return senhaCriptografada;
     }
 
-    public static String descriptografar(String senha) {
+    public static String descriptografarSenha(String senha) {
         String senhaDescriptografada = "";
         for (int i = 0; i < senha.length(); i++) {
             senhaDescriptografada += (char) (senha.charAt(i) - 2);
