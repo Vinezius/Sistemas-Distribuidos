@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package sistemas.distribuidos.framesCliente;
+package sistemas_distribuidos.framesCliente;
 
-import helpers.Criptografia;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
+import sistemas_distribuidos.helpers.ConexaoCliente;
+import sistemas_distribuidos.helpers.Criptografia;
 
 /**
  *
@@ -140,9 +141,16 @@ public class Login extends javax.swing.JFrame {
                 json.put("senha", senhaCriptografada);
                 json.put("operacao", 2);
                 System.out.println("Enviando mensagem: " + json + "\n através da porta: " + EscolherPorta.porta);
-                dispose();
-                Home home = new Home();
-                home.setVisible(true);
+                String status = ConexaoCliente.ConectarServidor(json);
+                if (status.charAt(0) == 'O') {
+                    this.setVisible(false);
+                    Home home = new Home();
+                    home.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao fazer login!");
+                    this.setVisible(true);
+                }
+
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -182,6 +190,10 @@ public class Login extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

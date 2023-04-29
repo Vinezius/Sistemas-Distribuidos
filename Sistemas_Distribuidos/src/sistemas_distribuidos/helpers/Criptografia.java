@@ -1,4 +1,4 @@
-package helpers;
+package sistemas_distribuidos.helpers;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -25,6 +25,7 @@ public class Criptografia {
             senhaDescriptografada += (char) (senha.charAt(i) - 2);
         }
         return senhaDescriptografada;
+        
     }
 
 }

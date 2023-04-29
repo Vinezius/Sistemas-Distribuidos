@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package sistemas.distribuidos.framesCliente;
+package sistemas_distribuidos.framesCliente;
 
-import helpers.Criptografia;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
+import sistemas_distribuidos.helpers.ConexaoCliente;
+import sistemas_distribuidos.helpers.Criptografia;
 
 /**
  *
@@ -184,10 +185,16 @@ public class Cadastro extends javax.swing.JFrame {
                 json.put("email", email);
                 json.put("senha", senhaCriptografada);
                 json.put("operacao", 1);
-                System.out.println("Enviando mensagem: " + json);
-                dispose();
-                Home home = new Home();
-                home.show();
+                System.out.println("Enviando mensagem: " + json + "\n através da porta: " + EscolherPorta.porta);
+                String status = ConexaoCliente.ConectarServidor(json);
+                if (status.charAt(0) == 'O') {
+                    this.setVisible(false);
+                    Home home = new Home();
+                    home.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao Cadastrar!");
+                    this.setVisible(true);
+                }
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -219,6 +226,10 @@ public class Cadastro extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Cadastro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

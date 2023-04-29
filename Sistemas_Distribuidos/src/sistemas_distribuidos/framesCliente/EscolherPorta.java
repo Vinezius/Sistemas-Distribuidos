@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package sistemas.distribuidos.framesCliente;
+package sistemas_distribuidos.framesCliente;
 
 import javax.swing.JOptionPane;
 
@@ -101,21 +101,20 @@ public class EscolherPorta extends javax.swing.JFrame {
 
     private void txtfEscolherPortaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfEscolherPortaKeyPressed
 
-
         charPorta = evt.getKeyChar();
-        
-         if (Character.isLetter(charPorta)) {
+
+        if (Character.isLetter(charPorta)) {
             txtfEscolherPorta.setEditable(false);
             lblEscolherPortaConexao.setText("Digite apenas números!");
-        }else{
-             txtfEscolherPorta.setEditable(true);
-         }
-        
+        } else {
+            txtfEscolherPorta.setEditable(true);
+        }
+
     }//GEN-LAST:event_txtfEscolherPortaKeyPressed
 
     private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
         // TODO add your handling code here:
-        portaString =  txtfEscolherPorta.getText();
+        portaString = txtfEscolherPorta.getText();
 
         if (Character.isLetter(charPorta)) {
             txtfEscolherPorta.setEditable(false);
@@ -125,8 +124,8 @@ public class EscolherPorta extends javax.swing.JFrame {
             txtfEscolherPorta.setEditable(true);
             Login login = new Login();
             login.setVisible(true);
-            System.out.println("Porta escolhida: "+ porta);
             porta = Integer.parseInt(portaString);
+            System.out.println("Porta escolhida: " + porta);
             dispose();
         }
 
@@ -158,6 +157,7 @@ public class EscolherPorta extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(EscolherPorta.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
