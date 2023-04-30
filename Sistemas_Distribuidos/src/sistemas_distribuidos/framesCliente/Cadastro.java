@@ -189,9 +189,15 @@ public class Cadastro extends javax.swing.JFrame {
                 JSONObject response = ConexaoCliente.ConectarServidor(json);
                 String status = response.getString("status");
                 if (status.charAt(0) == 'O') {
+                    JSONObject jsonLogin = new JSONObject();
+                    jsonLogin.put("email", email);
+                    jsonLogin.put("senha", senhaCriptografada);
+                    jsonLogin.put("operacao", 2);
+                    JSONObject responseLogin = ConexaoCliente.ConectarServidor(jsonLogin);
                     this.setVisible(false);
                     Home home = new Home();
                     home.setVisible(true);
+                    home.setDadosLogin(responseLogin);
                 } else {
                     JOptionPane.showMessageDialog(this, "Erro ao Cadastrar!");
                     this.setVisible(true);

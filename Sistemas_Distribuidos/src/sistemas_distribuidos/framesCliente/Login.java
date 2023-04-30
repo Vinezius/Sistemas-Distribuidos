@@ -147,6 +147,9 @@ public class Login extends javax.swing.JFrame {
                     this.setVisible(false);
                     Home home = new Home();
                     home.setVisible(true);
+                    
+                    home.setDadosLogin(response);
+                    
                 } else {
                     JOptionPane.showMessageDialog(this, "Erro ao fazer login!");
                     this.setVisible(true);

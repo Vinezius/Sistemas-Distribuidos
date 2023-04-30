@@ -14,11 +14,18 @@ import sistemas_distribuidos.helpers.ConexaoCliente;
  */
 public class Home extends javax.swing.JFrame {
 
+    JSONObject dadosLogin;
+    
     /**
      * Creates new form Home
      */
     public Home() {
         initComponents();
+        this.dadosLogin = null;
+    }
+
+    public void setDadosLogin(JSONObject dadosLogin) {
+        this.dadosLogin = dadosLogin;
     }
 
     /**
@@ -73,10 +80,9 @@ public class Home extends javax.swing.JFrame {
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
         try {
-            JSONObject json = new JSONObject();    
-            JSONObject dadosLogin = ConexaoCliente.getMensagemFinal();
-            String token = dadosLogin.getString("token");
-            Integer id = dadosLogin.getInt("id");
+            JSONObject json = new JSONObject();
+            String token = this.dadosLogin.getString("token");
+            Integer id = this.dadosLogin.getInt("id");
             json.put("operacao", 9);
             json.put("token", token);
             json.put("id", id);
