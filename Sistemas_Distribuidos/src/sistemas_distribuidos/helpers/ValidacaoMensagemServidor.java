@@ -4,13 +4,41 @@
  */
 package sistemas_distribuidos.helpers;
 
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.*;
 
 /**
  *
  * @author User
  */
-public class ValidacaoMensagemServidor {
+public class ValidacaoMensagemServidor extends Thread {
+
+    private String email;
+    private String senha;
+    private String nome;
+    private Integer operacao;
+
+    public ValidacaoMensagemServidor(String email, String senha, String nome,Integer operacao) {
+
+        this.email = email;
+        this.senha = senha;
+        this.nome = nome;
+        this.operacao = operacao;
+        
+    }
+
+    public void run() {
+        while (true) {
+            switch (operacao) {
+                case 1:
+                    validacaoCadastro(email, senha, nome);
+                case 2:
+                    validacaoOperacaoLogin(email, senha);
+            }
+        }
+
+    }
 
     public static String[] validacaoOperacaoLogin(String email, String senha) {
         String emailParse[] = email.split("@");
@@ -86,7 +114,7 @@ public class ValidacaoMensagemServidor {
                 conexao.close();
                 return false;
             } else {
-                String sqlCadastro = "INSERT INTO `usuario` (`IDUsuario`,`Nome`, `Email`, `Senha`) VALUES ("+ null +",'" + nome + "','" + email + "','" + senha + "')";
+                String sqlCadastro = "INSERT INTO `usuario` (`IDUsuario`,`Nome`, `Email`, `Senha`) VALUES (" + null + ",'" + nome + "','" + email + "','" + senha + "')";
                 System.out.println(sqlCadastro);
                 statement.executeUpdate(sqlCadastro);
                 conexao.close();

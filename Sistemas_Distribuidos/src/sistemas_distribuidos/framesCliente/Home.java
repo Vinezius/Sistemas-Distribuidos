@@ -4,6 +4,10 @@
  */
 package sistemas_distribuidos.framesCliente;
 
+import javax.swing.JOptionPane;
+import org.json.JSONObject;
+import sistemas_distribuidos.helpers.ConexaoCliente;
+
 /**
  *
  * @author User
@@ -68,10 +72,28 @@ public class Home extends javax.swing.JFrame {
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
-        Login login = new Login();
-        dispose();
-        login.show();
-                
+        try {
+            JSONObject json = new JSONObject();    
+            JSONObject dadosLogin = ConexaoCliente.getMensagemFinal();
+            String token = dadosLogin.getString("token");
+            Integer id = dadosLogin.getInt("id");
+            json.put("operacao", 9);
+            json.put("token", token);
+            json.put("id", id);
+            System.out.println("Enviando mensagem: " + json + "\n através da porta: " + EscolherPorta.porta);
+            JSONObject response = ConexaoCliente.ConectarServidor(json);
+            String status = response.getString("status");
+                if (status.charAt(0) == 'O') {
+                    this.setVisible(false);
+                    Login login = new Login();
+                    login.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao Realizar logout!");
+                    this.setVisible(true);
+                }
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**

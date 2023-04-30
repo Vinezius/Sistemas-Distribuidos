@@ -20,84 +20,136 @@ import org.json.JSONObject;
  */
 public class ConexaoServidor {
 
+    static ServerSocket socketServidor;
+
+    public static void ConectarCliente(Integer porta) throws JSONException {
+
+        try {
+            socketServidor = new ServerSocket(porta, 5);
+
+            System.out.println("Ouvindo na porta: " + porta);
+
+            while (true) {
+                try {
+                    Socket socketCliente = socketServidor.accept();
+                    try {
+                        System.out.println("Cliente conectado: " + socketCliente);
+
+                        InputStreamReader in = new InputStreamReader(socketCliente.getInputStream());
+
+                        BufferedReader bf = new BufferedReader(in);
+
+                        String mensagem = bf.readLine();
+
+                        System.out.println("Mensagem recebida: " + mensagem);
+                        JSONObject mensagemFinal = new JSONObject(mensagem);
+                        Integer operacao = mensagemFinal.getInt("operacao");
+
+                        System.out.println("Operacação: " + operacao);
+
+                        switch (operacao) {
+                            case 1 -> {
+                                String email = mensagemFinal.getString("email");
+                                String senha = mensagemFinal.getString("senha");
+                                String nome = mensagemFinal.getString("nome");
+                                Boolean resultado = ValidacaoMensagemServidor.validacaoCadastro(email, senha, nome);
+                                if (resultado) {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "OK");
+                                    pr.println(json);
+                                    pr.flush();
+                                } else {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "Erro Generico");
+                                    pr.println(json);
+                                    pr.flush();
+                                }
+                            }
+                            case 2 -> {
+                                String email = mensagemFinal.getString("email");
+                                String senha = mensagemFinal.getString("senha");
+                                String[] dados;
+
+                                dados = ValidacaoMensagemServidor.validacaoOperacaoLogin(email, senha);
+
+                                if (dados != null) {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    String idString = dados[0];
+                                    Integer id = Integer.parseInt(idString);
+                                    String token = CriarToken.autenticarUsuario(id);
+
+                                    json.put("operacao", operacao);
+                                    json.put("status", "OK");
+                                    json.put("token", token);
+                                    json.put("id", id);
+
+                                    pr.println(json);
+                                    pr.flush();
+                                } else {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "Erro Generico");
+                                    pr.println(json);
+                                    pr.flush();
+                                }
+
+                            }
+
+                            case 9 -> {
+                                if (mensagemFinal.length() > 0) {
+                                    Integer idUsuario = mensagemFinal.getInt("id");
+                                    CriarToken.removerToken(idUsuario);
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "OK");
+                                    pr.println(json);
+                                    pr.flush();
+                                    System.out.println("teste");
+                                } else {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "Erro Generico");
+                                    pr.println(json);
+                                    pr.flush();
+                                }
+
+                            }
+
+                        }
+
+                    } catch (IOException e) {
+                        System.out.println("Erro de conexão");;
+                    }
+                } catch (IOException e) {
+                    System.out.println("Conexão não aceita");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Não foi possivel abrir a porta:" + porta);
+        } finally {
+            try {
+                socketServidor.close();
+            } catch (IOException e) {
+                System.out.println("Não foi possivel fechar o servidor");
+                System.exit(1);
+            }
+        }
+
+    }
+
     public static void main(String[] args) throws IOException, JSONException {
         Scanner input = new Scanner(System.in);
         System.out.println("Escolha uma porta para conectar: ");
         Integer porta = input.nextInt();
         ConectarCliente(porta);
-    }
-
-    public static void ConectarCliente(Integer porta) throws IOException, JSONException {
-
-        ServerSocket socketServidor = new ServerSocket(porta);
-
-        Socket socketCliente = socketServidor.accept();
-
-        System.out.println("Cliente conectado");
-
-        InputStreamReader in = new InputStreamReader(socketCliente.getInputStream());
-
-        BufferedReader bf = new BufferedReader(in);
-
-        String mensagem = bf.readLine();
-        System.out.println("Mensagem recebida: " + mensagem);
-
-        JSONObject mensagemFinal = new JSONObject(mensagem);
-        Integer operacao = mensagemFinal.getInt("operacao");
-        String email = mensagemFinal.getString("email");
-        String senha = mensagemFinal.getString("senha");
-        String nome = mensagemFinal.getString("nome");
-
-        System.out.println("Operacação: " + operacao);
-
-        switch (operacao) {
-            case 1 -> {
-                Boolean resultado = ValidacaoMensagemServidor.validacaoCadastro(email, senha, nome);
-                if (resultado) {
-                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
-                    JSONObject json = new JSONObject();
-                    json.put("operacao", operacao);
-                    json.put("status", "OK");
-                    pr.println(json);
-                    pr.flush();
-                } else {
-                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
-                    JSONObject json = new JSONObject();
-                    json.put("operacao", operacao);
-                    json.put("status", "Erro Generico");
-                    pr.println(json);
-                    pr.flush();
-                }
-            }
-            case 2 -> {
-                String[] dados;
-
-                dados = ValidacaoMensagemServidor.validacaoOperacaoLogin(email, senha);
-                if (dados != null) {
-                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
-                    JSONObject json = new JSONObject();
-                    String token = CriarToken.gerarToken();
-
-                    String idString = dados[0];
-                    Integer id = Integer.parseInt(idString);
-                    json.put("operacao", operacao);
-                    json.put("status", "OK");
-                    json.put("token", token);
-                    json.put("id", id);
-                    pr.println(json);
-                    pr.flush();
-                } else {
-                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
-                    JSONObject json = new JSONObject();
-                    json.put("operacao", operacao);
-                    json.put("status", "Erro Generico");
-                    pr.println(json);
-                    pr.flush();
-                }
-            }
-
-        }
-
     }
 
 }

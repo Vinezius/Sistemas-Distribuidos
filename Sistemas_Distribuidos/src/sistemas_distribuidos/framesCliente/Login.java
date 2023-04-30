@@ -141,7 +141,8 @@ public class Login extends javax.swing.JFrame {
                 json.put("senha", senhaCriptografada);
                 json.put("operacao", 2);
                 System.out.println("Enviando mensagem: " + json + "\n através da porta: " + EscolherPorta.porta);
-                String status = ConexaoCliente.ConectarServidor(json);
+                JSONObject response = ConexaoCliente.ConectarServidor(json);
+                String status = response.getString("status");
                 if (status.charAt(0) == 'O') {
                     this.setVisible(false);
                     Home home = new Home();

@@ -4,6 +4,7 @@
  */
 package sistemas_distribuidos.helpers;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -31,4 +32,27 @@ public class CriarToken {
         }
         return token;
     }
+    
+    private static HashMap<Integer, String> tokens = new HashMap<>();
+    
+    public static void adicionarToken(Integer id, String token) {tokens.put(id,token);}
+    
+    public static void removerToken(Integer id){tokens.remove(id);}
+    
+    public static void verificarToken(Integer id, String token) throws Exception{
+        String tokenUsuario = tokens.get(id);
+        
+        if(tokenUsuario.isBlank() || !tokenUsuario.equals(tokens)){
+            throw new Exception();
+        }
+        
+    }
+    
+    public static String autenticarUsuario(Integer id){
+        String token = gerarToken();
+        removerToken(id);
+        adicionarToken(id, token);
+        return token;
+    }
+    
 }

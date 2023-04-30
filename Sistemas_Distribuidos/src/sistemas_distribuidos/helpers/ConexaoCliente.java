@@ -18,8 +18,10 @@ import sistemas_distribuidos.framesCliente.EscolherPorta;
  * @author User
  */
 public class ConexaoCliente {
+    
+    static JSONObject mensagemFinal;
 
-    public static String ConectarServidor(JSONObject mensagem) throws IOException, JSONException {
+    public static JSONObject ConectarServidor(JSONObject mensagem) throws IOException, JSONException {
 
         Integer porta = EscolherPorta.porta;
         System.out.println("Porta do cliente: " + porta);
@@ -38,11 +40,14 @@ public class ConexaoCliente {
         String mensagemRecebida = bf.readLine();
         System.out.println("Mensagem recebida: " + mensagemRecebida);
         
-        JSONObject mensagemFinal = new JSONObject(mensagemRecebida);
-        String status = mensagemFinal.getString("status");
+        mensagemFinal = new JSONObject(mensagemRecebida);
         
-        return status;
+        return mensagemFinal;
 
+    }
+    
+    public static JSONObject getMensagemFinal(){
+        return mensagemFinal;
     }
 
 }
