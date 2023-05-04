@@ -4,9 +4,11 @@
  */
 package sistemas_distribuidos.helpers;
 
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -18,14 +20,15 @@ public class ValidacaoMensagemServidor extends Thread {
     private String senha;
     private String nome;
     private Integer operacao;
+    private JSONObject mensagemFinal;
 
-    public ValidacaoMensagemServidor(String email, String senha, String nome,Integer operacao) {
+    public ValidacaoMensagemServidor(String email, String senha, String nome, Integer operacao, JSONObject mensagemFinal) {
 
         this.email = email;
         this.senha = senha;
         this.nome = nome;
         this.operacao = operacao;
-        
+
     }
 
     public void run() {
@@ -35,6 +38,15 @@ public class ValidacaoMensagemServidor extends Thread {
                     validacaoCadastro(email, senha, nome);
                 case 2:
                     validacaoOperacaoLogin(email, senha);
+                case 9:
+                {
+                    try {
+                        validacaoOperacaoLogout(mensagemFinal);
+                    } catch (JSONException ex) {
+                        Logger.getLogger(ValidacaoMensagemServidor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
             }
         }
 
@@ -125,6 +137,21 @@ public class ValidacaoMensagemServidor extends Thread {
             System.out.println(e.getMessage());
             return false;
         }
+
+    }
+
+    public static Boolean validacaoOperacaoLogout(JSONObject mensagem) throws JSONException {
+
+        String token = mensagem.getString("token");
+        Integer id = mensagem.getInt("id");
+        Integer operacao = mensagem.getInt("operacao");
+
+        if (token.length() > 0 && id > 0 && operacao == 9) {
+            return true;
+        }
+
+        return false;
+
     }
 
 }

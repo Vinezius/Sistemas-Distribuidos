@@ -82,11 +82,13 @@ public class ConexaoServidor {
                                     String idString = dados[0];
                                     Integer id = Integer.parseInt(idString);
                                     String token = CriarToken.autenticarUsuario(id);
+                                    String nome = dados[1];
 
                                     json.put("operacao", operacao);
                                     json.put("status", "OK");
                                     json.put("token", token);
                                     json.put("id", id);
+                                    json.put("nome", nome);
 
                                     pr.println(json);
                                     pr.flush();
@@ -102,7 +104,11 @@ public class ConexaoServidor {
                             }
 
                             case 9 -> {
-                                if (mensagemFinal.length() > 0) {
+
+                                Boolean validaMensagem;
+                                validaMensagem = ValidacaoMensagemServidor.validacaoOperacaoLogout(mensagemFinal);
+
+                                if (validaMensagem) {
                                     Integer idUsuario = mensagemFinal.getInt("id");
                                     CriarToken.removerToken(idUsuario);
                                     PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
@@ -111,7 +117,6 @@ public class ConexaoServidor {
                                     json.put("status", "OK");
                                     pr.println(json);
                                     pr.flush();
-                                    System.out.println("teste");
                                 } else {
                                     PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
                                     JSONObject json = new JSONObject();

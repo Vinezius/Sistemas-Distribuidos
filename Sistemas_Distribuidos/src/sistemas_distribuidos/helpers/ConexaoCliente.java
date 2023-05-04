@@ -24,9 +24,10 @@ public class ConexaoCliente {
     public static JSONObject ConectarServidor(JSONObject mensagem) throws IOException, JSONException {
 
         Integer porta = EscolherPorta.porta;
+        String host = EscolherPorta.host;
         System.out.println("Porta do cliente: " + porta);
 
-        Socket socketCliente = new Socket("localhost", porta);
+        Socket socketCliente = new Socket(host, porta);
 
         PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
 

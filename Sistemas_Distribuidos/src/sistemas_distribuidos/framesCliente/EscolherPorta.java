@@ -15,12 +15,14 @@ public class EscolherPorta extends javax.swing.JFrame {
     public static String portaString;
     public static Integer porta;
     public char charPorta;
+    public static String host;
 
     /**
      * Creates new form EscolherPorta
      */
     public EscolherPorta() {
         initComponents();
+        this.host = "localhost";
     }
 
     /**
@@ -36,6 +38,8 @@ public class EscolherPorta extends javax.swing.JFrame {
         lblEscolherPortaConexao = new javax.swing.JLabel();
         txtfEscolherPorta = new javax.swing.JTextField();
         btnEnviar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtfEscolherIp = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,21 +66,25 @@ public class EscolherPorta extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Escolha o endereço IP");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(221, 221, 221)
+                .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(156, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1)
                     .addComponent(lblEscolherPortaConexao)
                     .addComponent(lblEscolherPorta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtfEscolherPorta))
+                    .addComponent(txtfEscolherPorta)
+                    .addComponent(txtfEscolherIp))
                 .addGap(154, 154, 154))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(225, 225, 225)
-                .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,9 +95,13 @@ public class EscolherPorta extends javax.swing.JFrame {
                 .addComponent(lblEscolherPortaConexao)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtfEscolherPorta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtfEscolherIp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(143, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
 
         pack();
@@ -115,7 +127,8 @@ public class EscolherPorta extends javax.swing.JFrame {
     private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
         // TODO add your handling code here:
         portaString = txtfEscolherPorta.getText();
-
+        host = txtfEscolherIp.getText();
+        
         if (Character.isLetter(charPorta)) {
             txtfEscolherPorta.setEditable(false);
             JOptionPane.showMessageDialog(this, "Insira apeanas números!");
@@ -170,8 +183,10 @@ public class EscolherPorta extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblEscolherPorta;
     private javax.swing.JLabel lblEscolherPortaConexao;
+    private javax.swing.JTextField txtfEscolherIp;
     private javax.swing.JTextField txtfEscolherPorta;
     // End of variables declaration//GEN-END:variables
 }
