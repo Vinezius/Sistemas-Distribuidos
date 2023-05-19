@@ -97,6 +97,78 @@ public class ValidacaoMensagemServidor extends Thread {
         return null;
     }
 
+    private static Boolean validarUsuario(Integer id) {
+
+        String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
+        String usuario = "root";
+        String senhaBanco = "";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
+
+            Statement statement = conexao.createStatement();
+            String sql = "SELECT * FROM usuario WHERE IDUsuario = ";
+            ResultSet resultadosQuery = statement.executeQuery(sql + id);
+
+            if (resultadosQuery.next()) {
+                conexao.close();
+                return true;
+
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+    }
+
+    public static Boolean validarAlteracaoCadastro(String token, Integer id, String nome, String senha, String email) {
+
+        String emailParse[] = email.split("@");
+        String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
+        String usuario = "root";
+        String senhaBanco = "";
+        Boolean usuarioExiste = validarUsuario(id);
+
+        if (email.isEmpty() || senha.isEmpty()) {
+            return false;
+
+        } else if (!email.contains("@") || emailParse[0].length() > 50 || emailParse[1].length() > 10
+                || emailParse[0].length() < 3 || emailParse[1].length() < 3) {
+            return false;
+
+        } else if (senha.length() < 5 || senha.length() > 10) {
+
+            return false;
+        }
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
+            Statement statement = conexao.createStatement();
+
+
+            if (usuarioExiste) {
+                String sqlEdicaoDados = "UPDATE `Usuario` SET Nome = '" + nome + "', Email = '" + email + "', Senha = '" + senha + "' WHERE IDUsuario = " + id;
+                System.out.println(sqlEdicaoDados);
+                statement.executeUpdate(sqlEdicaoDados);
+                conexao.close();
+                return true;
+
+            } else {
+
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+    }
+
     public static Boolean validacaoCadastro(String email, String senha, String nome) {
         String emailParse[] = email.split("@");
         String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
@@ -170,15 +242,15 @@ public class ValidacaoMensagemServidor extends Thread {
                 incidentes.add(incidente);
 
             }
-            
+
             return incidentes;
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
+
         return incidentes;
-        
+
     }
 
     public static Boolean validacaoCadastroIncidente(String data, String cidade, String bairro, String estado, String tipoIncidente, String rua, String hora, Integer id) {
@@ -201,7 +273,7 @@ public class ValidacaoMensagemServidor extends Thread {
             Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
             Statement statement = conexao.createStatement();
             String sqlCadastroIncidente = "INSERT INTO `incidentes` (`IDIncidente`,`Data_Incidente`,`Hora_Incidente`,`Estado`,`Cidade`,`Bairro`,`Tipo_Incidente`, `IDUsuario`, `Rua`) "
-                    + "VALUES (" + null + ",'" + data + "','" + hora + "','" + estado + "','" + cidade + "','" + bairro + "','" + tipoIncidente + "','" + id + "','"+rua+ "')";
+                    + "VALUES (" + null + ",'" + data + "','" + hora + "','" + estado + "','" + cidade + "','" + bairro + "','" + tipoIncidente + "','" + id + "','" + rua + "')";
             System.out.println(sqlCadastroIncidente);
             statement.executeUpdate(sqlCadastroIncidente);
             conexao.close();

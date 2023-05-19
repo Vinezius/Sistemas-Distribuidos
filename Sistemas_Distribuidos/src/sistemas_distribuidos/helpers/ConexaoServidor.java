@@ -105,6 +105,29 @@ public class ConexaoServidor {
                                 }
 
                             }
+                            case 3 -> {
+                                String email = mensagemFinal.getString("email");
+                                String senha = mensagemFinal.getString("senha");
+                                String nome = mensagemFinal.getString("nome");
+                                String token = mensagemFinal.getString("token");
+                                Integer id = mensagemFinal.getInt("id");
+                                Boolean resultado = ValidacaoMensagemServidor.validarAlteracaoCadastro(token, id, nome, senha, email);
+                                if (resultado) {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "OK");
+                                    pr.println(json);
+                                    pr.flush();
+                                } else {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "Erro Generico");
+                                    pr.println(json);
+                                    pr.flush();
+                                }
+                            }
                             case 4 -> {
                                 String cidade = mensagemFinal.getString("cidade");
                                 String estado = mensagemFinal.getString("estado");
@@ -141,12 +164,12 @@ public class ConexaoServidor {
                                         pr.println(json);
                                         pr.flush();
                                     }
-                                } else{
+                                } else {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "Erro Generico");
                                     pr.println(json);
-                                    pr.flush();                                    
+                                    pr.flush();
                                 }
 
                             }
