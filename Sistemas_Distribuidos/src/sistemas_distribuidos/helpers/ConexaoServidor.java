@@ -103,6 +103,32 @@ public class ConexaoServidor {
 
                             }
 
+                            case 7 -> {
+                                String data = mensagemFinal.getString("data");
+                                String cidade = mensagemFinal.getString("cidade");
+                                String bairro = mensagemFinal.getString("bairro");
+                                String estado = mensagemFinal.getString("estado");
+                                String tipoIncidente = mensagemFinal.getString("tipo incidente");
+                                String rua = mensagemFinal.getString("rua");
+                                String hora = mensagemFinal.getString("hora");
+                                Boolean resultado = ValidacaoMensagemServidor.validacaoCadastroIncidente(data, cidade, bairro, estado, tipoIncidente, rua, hora);
+                                if (resultado) {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "OK");
+                                    pr.println(json);
+                                    pr.flush();
+                                } else {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "Erro Generico");
+                                    pr.println(json);
+                                    pr.flush();
+                                }
+                            }
+
                             case 9 -> {
 
                                 Boolean validaMensagem;
@@ -126,6 +152,9 @@ public class ConexaoServidor {
                                     pr.flush();
                                 }
 
+                            }
+                            default -> {
+                                bf.close();
                             }
 
                         }

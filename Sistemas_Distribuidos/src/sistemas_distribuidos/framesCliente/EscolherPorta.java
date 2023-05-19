@@ -135,8 +135,8 @@ public class EscolherPorta extends javax.swing.JFrame {
 
         } else {
             txtfEscolherPorta.setEditable(true);
-            Login login = new Login();
-            login.setVisible(true);
+            HomeVisitante homeVisitante = new HomeVisitante();
+            homeVisitante.setVisible(true);
             porta = Integer.parseInt(portaString);
             System.out.println("Porta escolhida: " + porta);
             dispose();

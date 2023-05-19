@@ -7,8 +7,11 @@ package sistemas_distribuidos.helpers;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.json.JSONException;
 import org.json.JSONObject;
+import sistemas_distribuidos.framesCliente.EscolherPorta;
+import sistemas_distribuidos.framesCliente.Login;
 
 /**
  *
@@ -38,8 +41,7 @@ public class ValidacaoMensagemServidor extends Thread {
                     validacaoCadastro(email, senha, nome);
                 case 2:
                     validacaoOperacaoLogin(email, senha);
-                case 9:
-                {
+                case 9: {
                     try {
                         validacaoOperacaoLogout(mensagemFinal);
                     } catch (JSONException ex) {
@@ -132,6 +134,39 @@ public class ValidacaoMensagemServidor extends Thread {
                 conexao.close();
                 return true;
             }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+    }
+
+    public static Boolean validacaoCadastroIncidente(String data, String cidade, String bairro, String estado, String tipoIncidente, String rua, String hora) {
+        Boolean dataValidada = FormatarDataHora.validarData(data);
+        String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
+        String usuario = "root";
+        String senhaBanco = "";
+
+        if (data.isEmpty() || cidade.isEmpty() || bairro.isEmpty() || estado.isEmpty() || tipoIncidente.isEmpty() || rua.isEmpty() || hora.isEmpty()) {
+            return false;
+
+        } else if (!dataValidada) {
+            return false;
+        } else if (rua.length() > 50 || cidade.length() > 50 || bairro.length() > 50) {
+            return false;
+        }
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
+            Statement statement = conexao.createStatement();
+            String sqlCadastroIncidente = "INSERT INTO `incidentes` (`IDIncidente`,`Data_Incidente`,`Hora_Incidente`,`Estado`,`Cidade`,`Bairro`,`Tipo_Incidente`) "
+                    + "VALUES (" + null + ",'" + data + "','" + hora + "','" + estado + "','" + cidade + "','" + bairro + "','" + tipoIncidente + "')";
+            System.out.println(sqlCadastroIncidente);
+            statement.executeUpdate(sqlCadastroIncidente);
+            conexao.close();
+            return true;
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
