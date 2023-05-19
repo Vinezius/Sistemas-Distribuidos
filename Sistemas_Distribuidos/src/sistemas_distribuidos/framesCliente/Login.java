@@ -143,7 +143,7 @@ public class Login extends javax.swing.JFrame {
                 System.out.println("Enviando mensagem: " + json + "\n através da porta: " + EscolherPorta.porta);
                 JSONObject response = ConexaoCliente.ConectarServidor(json);
                 String status = response.getString("status");
-                if (status.charAt(0) == 'O') {
+                if (status.equals("OK")) {
                     this.setVisible(false);
                     Home home = new Home();
                     home.setVisible(true);

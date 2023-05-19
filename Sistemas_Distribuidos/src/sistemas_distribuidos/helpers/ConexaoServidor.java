@@ -10,9 +10,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import sistemas_distribuidos.entidades.Incidente;
 
 /**
  *
@@ -102,7 +105,51 @@ public class ConexaoServidor {
                                 }
 
                             }
+                            case 4 -> {
+                                String cidade = mensagemFinal.getString("cidade");
+                                String estado = mensagemFinal.getString("estado");
+                                String data = mensagemFinal.getString("data");
+                                Boolean dataValidada = FormatarDataHora.validarData(data);
+                                PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                if (dataValidada) {
+                                    List<Incidente> listaIncidentes = ValidacaoMensagemServidor.validacaoBuscaIncidentes(data, cidade, estado);
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "OK");
+                                    if (listaIncidentes.isEmpty()) {
+                                        JSONArray jsonArrayIncidentes = new JSONArray();
+                                        json.put("incidentes", jsonArrayIncidentes);
+                                        pr.println(json);
+                                        pr.flush();
 
+                                    } else {
+                                        JSONArray jsonArrayIncidentes = new JSONArray();
+                                        for (Incidente incidente : listaIncidentes) {
+                                            JSONObject jsonIncidente = new JSONObject();
+                                            jsonIncidente.put("tipo_incidente", incidente.getTipoIncidente());
+                                            jsonIncidente.put("data", incidente.getData());
+                                            jsonIncidente.put("hora", incidente.getHora());
+                                            jsonIncidente.put("cidade", incidente.getCidade());
+                                            jsonIncidente.put("bairro", incidente.getBairro());
+                                            jsonIncidente.put("rua", incidente.getRua());
+                                            jsonIncidente.put("estado", incidente.getEstado());
+                                            jsonIncidente.put("id", incidente.getId());
+
+                                            jsonArrayIncidentes.put(jsonIncidente);
+                                        }
+                                        json.put("incidentes", jsonArrayIncidentes);
+                                        pr.println(json);
+                                        pr.flush();
+                                    }
+                                } else{
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "Erro Generico");
+                                    pr.println(json);
+                                    pr.flush();                                    
+                                }
+
+                            }
                             case 7 -> {
                                 String data = mensagemFinal.getString("data");
                                 String cidade = mensagemFinal.getString("cidade");
@@ -111,7 +158,8 @@ public class ConexaoServidor {
                                 String tipoIncidente = mensagemFinal.getString("tipo incidente");
                                 String rua = mensagemFinal.getString("rua");
                                 String hora = mensagemFinal.getString("hora");
-                                Boolean resultado = ValidacaoMensagemServidor.validacaoCadastroIncidente(data, cidade, bairro, estado, tipoIncidente, rua, hora);
+                                Integer id = mensagemFinal.getInt("id");
+                                Boolean resultado = ValidacaoMensagemServidor.validacaoCadastroIncidente(data, cidade, bairro, estado, tipoIncidente, rua, hora, id);
                                 if (resultado) {
                                     PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
                                     JSONObject json = new JSONObject();

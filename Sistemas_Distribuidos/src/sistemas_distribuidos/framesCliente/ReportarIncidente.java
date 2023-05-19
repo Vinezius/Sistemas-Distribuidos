@@ -21,7 +21,7 @@ public class ReportarIncidente extends javax.swing.JFrame {
     /**
      * Creates new form ReportarIncidente
      */
-    public ReportarIncidente(String token, Integer Id) {
+    public ReportarIncidente(String token, Integer id) {
         this.token = token;
         this.id = id;
         initComponents();
@@ -246,10 +246,11 @@ public class ReportarIncidente extends javax.swing.JFrame {
             } else if (rua.length() > 50 || cidade.length() > 50 || bairro.length() > 50) {
                 JOptionPane.showMessageDialog(this, "Tamanho máximo do campo excedido!");
             } else {
+                System.out.println(id);
                 JSONObject json = new JSONObject();
                 json.put("operacao", 7);
                 json.put("token", token);
-                json.put("id", id);
+                json.put("id", this.id);
                 json.put("data", data);
                 json.put("rua", rua.toUpperCase());
                 json.put("tipo incidente", tipoIncidente);
@@ -261,7 +262,7 @@ public class ReportarIncidente extends javax.swing.JFrame {
                 System.out.println("Enviando mensagem: " + json + "\n através da porta: " + EscolherPorta.porta);
                 JSONObject response = ConexaoCliente.ConectarServidor(json);
                 String status = response.getString("status");
-                if (status.charAt(0) == 'O') {
+                if (status.equals("OK")) {
                     JOptionPane.showMessageDialog(this, "Cadastrado com sucesso!");
                     this.setVisible(false);
                     Home home = new Home();

@@ -188,7 +188,7 @@ public class Cadastro extends javax.swing.JFrame {
                 System.out.println("Enviando mensagem: " + json + "\n através da porta: " + EscolherPorta.porta);
                 JSONObject response = ConexaoCliente.ConectarServidor(json);
                 String status = response.getString("status");
-                if (status.charAt(0) == 'O') {
+                if (status.equals("OK")) {
                     JSONObject jsonLogin = new JSONObject();
                     jsonLogin.put("email", email);
                     jsonLogin.put("senha", senhaCriptografada);

@@ -5,9 +5,11 @@
 package sistemas_distribuidos.framesCliente;
 
 import javax.swing.JOptionPane;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import sistemas_distribuidos.helpers.ConexaoCliente;
+import sistemas_distribuidos.helpers.FormatarDataHora;
 
 /**
  *
@@ -45,10 +47,17 @@ public class Home extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtAListagem = new javax.swing.JTextArea();
         lblWelcome = new javax.swing.JLabel();
         btnReportarIncidente = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnFiltrar = new javax.swing.JButton();
+        comboEstado = new javax.swing.JComboBox<>();
+        txtfData = new javax.swing.JTextField();
+        txtfCidade = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtaListagem = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,10 +72,6 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        txtAListagem.setColumns(20);
-        txtAListagem.setRows(5);
-        jScrollPane1.setViewportView(txtAListagem);
-
         lblWelcome.setText("Boas vindas!");
 
         btnReportarIncidente.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
@@ -77,6 +82,27 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("Data");
+
+        jLabel4.setText("Estado");
+
+        jLabel5.setText("Cidade");
+
+        btnFiltrar.setText("Filtrar");
+        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFiltrarActionPerformed(evt);
+            }
+        });
+
+        comboEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        txtaListagem.setEditable(false);
+        txtaListagem.setColumns(20);
+        txtaListagem.setRows(5);
+        txtaListagem.setText(" ");
+        jScrollPane1.setViewportView(txtaListagem);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -84,45 +110,82 @@ public class Home extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 558, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblWelcome)))
-                .addGap(18, 18, 18)
+                .addContainerGap(649, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblWelcome)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtfData, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(comboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(61, 61, 61)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtfCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1)
-                        .addGap(0, 25, Short.MAX_VALUE))
-                    .addComponent(btnReportarIncidente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addGap(37, 37, 37))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(9, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
+                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnReportarIncidente, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnReportarIncidente, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(47, 47, 47))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel5))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtfData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtfCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3)
+                                .addGap(47, 47, 47))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnReportarIncidente, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(71, 71, 71))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
+
+        comboEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ESTADOS", "RO", "AC", "AM", "RR", "PA", "AP", "TO", "MA", "PI", "CE", "RN", "PB", "PE", "AL", "SE", "BA", "MG", "ES", "RJ", "SP", "PR", "SC", "RS", "MS", "MT", "GO", "DF" }));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -138,7 +201,7 @@ public class Home extends javax.swing.JFrame {
             System.out.println("Enviando mensagem: " + json + "\n através da porta: " + EscolherPorta.porta);
             JSONObject response = ConexaoCliente.ConectarServidor(json);
             String status = response.getString("status");
-            if (status.charAt(0) == 'O') {
+            if (status.equals("OK")) {
                 this.setVisible(false);
                 Login login = new Login();
                 login.setVisible(true);
@@ -155,6 +218,66 @@ public class Home extends javax.swing.JFrame {
         ReportarIncidente reportarIncidente = new ReportarIncidente(token, id);
         reportarIncidente.setVisible(true);
     }//GEN-LAST:event_btnReportarIncidenteActionPerformed
+
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+        String cidade = txtfCidade.getText();
+        String estado = comboEstado.getSelectedItem() + "";
+        String data = txtfData.getText();
+        Boolean dataValidada = FormatarDataHora.validarData(data);
+        txtaListagem.setText("");
+
+        try {
+            if (data.isEmpty() || cidade.isEmpty() || estado.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Preencha todos os campos!");
+
+            } else if (!dataValidada) {
+                JOptionPane.showMessageDialog(this, "Preencha a data corretamente! yyyy-mm-dd");
+            } else {
+                JSONObject json = new JSONObject();
+                json.put("operacao", 4);
+                json.put("data", data);
+                json.put("estado", estado);
+                json.put("cidade", cidade.toUpperCase());
+
+                System.out.println("Enviando mensagem: " + json + "\n através da porta: " + EscolherPorta.porta);
+                JSONObject response = ConexaoCliente.ConectarServidor(json);
+                String status = response.getString("status");
+
+                if (status.equals("OK")) {
+                    JOptionPane.showMessageDialog(this, "Filtrado com sucesso!");
+                    JSONArray jsonArrayIncidentes = (JSONArray) response.get("incidentes");
+                    if (jsonArrayIncidentes.length() == 0) {
+                        txtaListagem.setText("\tNENHUM INCIDENTE FOI ENCONTRADO!");
+                    } else {
+                        txtaListagem.setText("\tRESULTADOS DA BUSCA SOBRE: " + cidade + " - " + estado + " DATA: " + data);
+                        for (int i = 0; i < jsonArrayIncidentes.length(); i++) {
+                            JSONObject incidente = jsonArrayIncidentes.getJSONObject(i);
+                            String tipoIncidente = incidente.getString("tipo_incidente");
+                            String dataIncidente = incidente.getString("data");
+                            String horaIncidente = incidente.getString("hora");
+                            String cidadeIncidente = incidente.getString("cidade");
+                            String bairroIncidente = incidente.getString("bairro");
+                            String estadoIncidente = incidente.getString("estado");
+                            String ruaIncidente = incidente.getString("rua");
+                            int idIncidente = incidente.getInt("id");
+                            txtaListagem.append("\nData: " + dataIncidente + " \nHora: " + horaIncidente + " \nID: " + idIncidente + " \nTipo de Incidente: " + tipoIncidente + "\nCidade: " + cidadeIncidente + " - " + estadoIncidente + " \nRua: " + ruaIncidente + " \nBairro: " + bairroIncidente);
+                            txtaListagem.append("\n--------------------------------------------------------------------------------------------------------------\n");
+
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro!");
+                    this.setVisible(true);
+                }
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+
+    }//GEN-LAST:event_btnFiltrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,12 +322,19 @@ public class Home extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnReportarIncidente;
+    private javax.swing.JComboBox<String> comboEstado;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblWelcome;
-    private javax.swing.JTextArea txtAListagem;
+    private javax.swing.JTextArea txtaListagem;
+    private javax.swing.JTextField txtfCidade;
+    private javax.swing.JTextField txtfData;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,14 +4,14 @@
  */
 package sistemas_distribuidos.helpers;
 
+import java.util.List;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import org.json.JSONException;
 import org.json.JSONObject;
-import sistemas_distribuidos.framesCliente.EscolherPorta;
-import sistemas_distribuidos.framesCliente.Login;
+import sistemas_distribuidos.entidades.Incidente;
 
 /**
  *
@@ -142,7 +142,46 @@ public class ValidacaoMensagemServidor extends Thread {
 
     }
 
-    public static Boolean validacaoCadastroIncidente(String data, String cidade, String bairro, String estado, String tipoIncidente, String rua, String hora) {
+    public static List<Incidente> validacaoBuscaIncidentes(String data, String cidade, String estado) {
+        List<Incidente> incidentes = new ArrayList<>();
+        String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
+        String usuario = "root";
+        String senhaBanco = "";
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
+            Statement statement = conexao.createStatement();
+            String sql = "SELECT * FROM incidentes WHERE `Data_Incidente` LIKE '" + data + "' AND `Cidade` LIKE '" + cidade + "' AND `Estado` LIKE '" + estado + "'";
+            System.out.println(sql);
+            ResultSet resultadosQuery = statement.executeQuery(sql);
+
+            while (resultadosQuery.next()) {
+                String tipoIncidente = resultadosQuery.getString("Tipo_Incidente");
+                String hora = resultadosQuery.getString("Hora_Incidente");
+                String rua = resultadosQuery.getString("Rua");
+                String bairro = resultadosQuery.getString("Bairro");
+                int idUser = resultadosQuery.getInt("IDUsuario");
+                int idIncidente = resultadosQuery.getInt("IDIncidente");
+
+                Incidente incidente = new Incidente(tipoIncidente, data, hora, cidade, bairro, rua, estado, idUser);
+                incidente.setId(idIncidente);
+                incidentes.add(incidente);
+
+            }
+            
+            return incidentes;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+        return incidentes;
+        
+    }
+
+    public static Boolean validacaoCadastroIncidente(String data, String cidade, String bairro, String estado, String tipoIncidente, String rua, String hora, Integer id) {
         Boolean dataValidada = FormatarDataHora.validarData(data);
         String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
         String usuario = "root";
@@ -161,8 +200,8 @@ public class ValidacaoMensagemServidor extends Thread {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
             Statement statement = conexao.createStatement();
-            String sqlCadastroIncidente = "INSERT INTO `incidentes` (`IDIncidente`,`Data_Incidente`,`Hora_Incidente`,`Estado`,`Cidade`,`Bairro`,`Tipo_Incidente`) "
-                    + "VALUES (" + null + ",'" + data + "','" + hora + "','" + estado + "','" + cidade + "','" + bairro + "','" + tipoIncidente + "')";
+            String sqlCadastroIncidente = "INSERT INTO `incidentes` (`IDIncidente`,`Data_Incidente`,`Hora_Incidente`,`Estado`,`Cidade`,`Bairro`,`Tipo_Incidente`, `IDUsuario`, `Rua`) "
+                    + "VALUES (" + null + ",'" + data + "','" + hora + "','" + estado + "','" + cidade + "','" + bairro + "','" + tipoIncidente + "','" + id + "','"+rua+ "')";
             System.out.println(sqlCadastroIncidente);
             statement.executeUpdate(sqlCadastroIncidente);
             conexao.close();
