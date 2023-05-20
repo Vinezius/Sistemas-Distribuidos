@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import sistemas_distribuidos.entidades.Incidente;
+import sistemas_distribuidos.framesServidor.ListarClientes;
 
 /**
  *
@@ -24,6 +25,14 @@ import sistemas_distribuidos.entidades.Incidente;
 public class ConexaoServidor {
 
     static ServerSocket socketServidor;
+    static String[] clientesConectados = new String[5];
+    static Integer count = 0;
+    static ListarClientes cliente = new ListarClientes();
+    
+    public static void preencherClientesConectados(String[] clienteConectados){
+        cliente.preencherLista(clienteConectados);
+        
+    }
 
     public static void ConectarCliente(Integer porta) throws JSONException {
 
@@ -36,6 +45,13 @@ public class ConexaoServidor {
                 try {
                     Socket socketCliente = socketServidor.accept();
                     try {
+                        clientesConectados[count] = socketCliente + "";
+                        count++;
+
+                        for (int i = 0; i < clientesConectados.length; i++) {
+                            preencherClientesConectados(clientesConectados);
+                        }
+
                         System.out.println("Cliente conectado: " + socketCliente);
 
                         InputStreamReader in = new InputStreamReader(socketCliente.getInputStream());
