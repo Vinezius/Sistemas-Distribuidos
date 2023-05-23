@@ -194,11 +194,11 @@ public class ConexaoServidor {
                                 String cidade = mensagemFinal.getString("cidade");
                                 String bairro = mensagemFinal.getString("bairro");
                                 String estado = mensagemFinal.getString("estado");
-                                String tipoIncidente = mensagemFinal.getString("tipo incidente");
+                                Integer tipo_incidente = mensagemFinal.getInt("tipo_incidente");
                                 String rua = mensagemFinal.getString("rua");
                                 String hora = mensagemFinal.getString("hora");
                                 Integer id = mensagemFinal.getInt("id");
-                                Boolean resultado = ValidacaoMensagemServidor.validacaoCadastroIncidente(data, cidade, bairro, estado, tipoIncidente, rua, hora, id);
+                                Boolean resultado = ValidacaoMensagemServidor.validacaoCadastroIncidente(data, cidade, bairro, estado, tipo_incidente, rua, hora, id);
                                 if (resultado) {
                                     PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
                                     JSONObject json = new JSONObject();

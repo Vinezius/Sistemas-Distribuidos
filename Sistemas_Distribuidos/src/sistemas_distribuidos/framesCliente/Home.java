@@ -215,8 +215,8 @@ public class Home extends javax.swing.JFrame {
             String status = response.getString("status");
             if (status.equals("OK")) {
                 this.setVisible(false);
-                Login login = new Login();
-                login.setVisible(true);
+                HomeVisitante homeVisitante = new HomeVisitante();
+                homeVisitante.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Erro ao Realizar logout!");
                 this.setVisible(true);
@@ -264,7 +264,7 @@ public class Home extends javax.swing.JFrame {
                         txtaListagem.setText("\tRESULTADOS DA BUSCA SOBRE: " + cidade + " - " + estado + " DATA: " + data);
                         for (int i = 0; i < jsonArrayIncidentes.length(); i++) {
                             JSONObject incidente = jsonArrayIncidentes.getJSONObject(i);
-                            String tipoIncidente = incidente.getString("tipo_incidente");
+                            Integer tipoIncidente = incidente.getInt("tipo_incidente");
                             String dataIncidente = incidente.getString("data");
                             String horaIncidente = incidente.getString("hora");
                             String cidadeIncidente = incidente.getString("cidade");
@@ -272,7 +272,52 @@ public class Home extends javax.swing.JFrame {
                             String estadoIncidente = incidente.getString("estado");
                             String ruaIncidente = incidente.getString("rua");
                             int idIncidente = incidente.getInt("id");
-                            txtaListagem.append("\nData: " + dataIncidente + " \nHora: " + horaIncidente + " \nID: " + idIncidente + " \nTipo de Incidente: " + tipoIncidente + "\nCidade: " + cidadeIncidente + " - " + estadoIncidente + " \nRua: " + ruaIncidente + " \nBairro: " + bairroIncidente);
+                            String descIncidente;
+
+                            switch (tipoIncidente) {
+                                case 1:
+                                    descIncidente = "Alagamento";
+                                    break;
+                                case 2:
+                                    descIncidente = "Deslizamento";
+                                    break;
+
+                                case 3:
+                                    descIncidente = "Acidente de carro";
+                                    break;
+
+                                case 4:
+                                    descIncidente = "Obstrução da via";
+                                    break;
+
+                                case 5:
+                                    descIncidente = "Fissura da via";
+                                    break;
+
+                                case 6:
+                                    descIncidente = "Pista em obras";
+                                    break;
+
+                                case 7:
+                                    descIncidente = "Lentidão na pista";
+                                    break;
+
+                                case 8:
+                                    descIncidente = "Animais na pista";
+                                    break;
+
+                                case 9:
+                                    descIncidente = "Nevoeiro";
+                                    break;
+
+                                case 10:
+                                    descIncidente = "Tromba d'água";
+                                    break;
+                                default:
+                                    descIncidente = "Sem incidentes";
+                            }
+
+                            txtaListagem.append("\nData: " + dataIncidente + " \nHora: " + horaIncidente + " \nID: " + idIncidente + " \nTipo de Incidente: " + descIncidente + "\nCidade: " + cidadeIncidente + " - " + estadoIncidente + " \nRua: " + ruaIncidente + " \nBairro: " + bairroIncidente);
                             txtaListagem.append("\n--------------------------------------------------------------------------------------------------------------\n");
 
                         }

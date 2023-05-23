@@ -230,7 +230,7 @@ public class ValidacaoMensagemServidor extends Thread {
             ResultSet resultadosQuery = statement.executeQuery(sql);
 
             while (resultadosQuery.next()) {
-                String tipoIncidente = resultadosQuery.getString("Tipo_Incidente");
+                Integer tipoIncidente = resultadosQuery.getInt("Tipo_Incidente");
                 String hora = resultadosQuery.getString("Hora_Incidente");
                 String rua = resultadosQuery.getString("Rua");
                 String bairro = resultadosQuery.getString("Bairro");
@@ -253,13 +253,13 @@ public class ValidacaoMensagemServidor extends Thread {
 
     }
 
-    public static Boolean validacaoCadastroIncidente(String data, String cidade, String bairro, String estado, String tipoIncidente, String rua, String hora, Integer id) {
+    public static Boolean validacaoCadastroIncidente(String data, String cidade, String bairro, String estado, Integer tipo_incidente, String rua, String hora, Integer id) {
         Boolean dataValidada = FormatarDataHora.validarData(data);
         String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
         String usuario = "root";
         String senhaBanco = "";
 
-        if (data.isEmpty() || cidade.isEmpty() || bairro.isEmpty() || estado.isEmpty() || tipoIncidente.isEmpty() || rua.isEmpty() || hora.isEmpty()) {
+        if (data.isEmpty() || cidade.isEmpty() || bairro.isEmpty() || estado.isEmpty() || tipo_incidente == null || rua.isEmpty() || hora.isEmpty()) {
             return false;
 
         } else if (!dataValidada) {
@@ -273,7 +273,7 @@ public class ValidacaoMensagemServidor extends Thread {
             Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
             Statement statement = conexao.createStatement();
             String sqlCadastroIncidente = "INSERT INTO `incidentes` (`IDIncidente`,`Data_Incidente`,`Hora_Incidente`,`Estado`,`Cidade`,`Bairro`,`Tipo_Incidente`, `IDUsuario`, `Rua`) "
-                    + "VALUES (" + null + ",'" + data + "','" + hora + "','" + estado + "','" + cidade + "','" + bairro + "','" + tipoIncidente + "','" + id + "','" + rua + "')";
+                    + "VALUES (" + null + ",'" + data + "','" + hora + "','" + estado + "','" + cidade + "','" + bairro + "','" + tipo_incidente + "','" + id + "','" + rua + "')";
             System.out.println(sqlCadastroIncidente);
             statement.executeUpdate(sqlCadastroIncidente);
             conexao.close();

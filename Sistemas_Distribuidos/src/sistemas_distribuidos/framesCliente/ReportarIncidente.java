@@ -236,6 +236,50 @@ public class ReportarIncidente extends javax.swing.JFrame {
         String rua = txtfRua.getText();
         String hora = txtfHora.getText();
         Boolean dataValidada = FormatarDataHora.validarData(data);
+        Integer codIncidente;
+
+        switch (tipoIncidente) {
+            case "Alagamento":
+                codIncidente = 1;
+                break;
+            case "Deslizamento":
+                codIncidente = 2;
+                break;
+
+            case "Acidente de carro":
+                codIncidente = 3;
+                break;
+
+            case "Obstrução da via":
+                codIncidente = 4;
+                break;
+
+            case "Fissura da via":
+                codIncidente = 5;
+                break;
+
+            case "Pista em obras":
+                codIncidente = 6;
+                break;
+
+            case "Lentidão na pista":
+                codIncidente = 7;
+                break;
+
+            case "Animais na pista":
+                codIncidente = 8;
+                break;
+
+            case "Nevoeiro":
+                codIncidente = 9;
+                break;
+
+            case "Tromba d'água":
+                codIncidente = 10;
+                break;
+            default:
+                codIncidente = 0;
+        }
 
         try {
             if (data.isEmpty() || cidade.isEmpty() || bairro.isEmpty() || estado.isEmpty() || tipoIncidente.isEmpty() || rua.isEmpty() || hora.isEmpty()) {
@@ -253,7 +297,7 @@ public class ReportarIncidente extends javax.swing.JFrame {
                 json.put("id", this.id);
                 json.put("data", data);
                 json.put("rua", rua.toUpperCase());
-                json.put("tipo incidente", tipoIncidente);
+                json.put("tipo_incidente", codIncidente);
                 json.put("estado", estado);
                 json.put("cidade", cidade.toUpperCase());
                 json.put("bairro", bairro.toUpperCase());

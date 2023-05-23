@@ -10,7 +10,7 @@ package sistemas_distribuidos.entidades;
  */
 public class Incidente {
     
-	private String tipoIncidente;
+	private Integer tipoIncidente;
 	private String data;
 	private String hora;
 	private String cidade;
@@ -22,7 +22,7 @@ public class Incidente {
 	
 	private int id = -1;
 	
-	public Incidente(String tipoIncidente, String data, String hora, String cidade, String bairro, String rua,
+	public Incidente(Integer tipoIncidente, String data, String hora, String cidade, String bairro, String rua,
 			String estado, int idUsuario) {
 		this.tipoIncidente = tipoIncidente;
 		this.data = data;
@@ -42,7 +42,7 @@ public class Incidente {
 		this.id = id;
 	}
 	
-	public String getTipoIncidente() {
+	public Integer getTipoIncidente() {
 		return tipoIncidente;
 	}
 	public String getData() {
