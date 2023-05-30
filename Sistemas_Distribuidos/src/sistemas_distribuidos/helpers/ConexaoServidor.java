@@ -172,7 +172,7 @@ public class ConexaoServidor {
                                             jsonIncidente.put("bairro", incidente.getBairro());
                                             jsonIncidente.put("rua", incidente.getRua());
                                             jsonIncidente.put("estado", incidente.getEstado());
-                                            jsonIncidente.put("id", incidente.getId());
+                                            jsonIncidente.put("id_incidente", incidente.getId());
 
                                             jsonArrayIncidentes.put(jsonIncidente);
                                         }

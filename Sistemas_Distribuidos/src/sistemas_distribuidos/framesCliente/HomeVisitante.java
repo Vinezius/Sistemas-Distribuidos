@@ -220,7 +220,7 @@ public class HomeVisitante extends javax.swing.JFrame {
                             String bairroIncidente = incidente.getString("bairro");
                             String estadoIncidente = incidente.getString("estado");
                             String ruaIncidente = incidente.getString("rua");
-                            int idIncidente = incidente.getInt("id");
+                            int idIncidente = incidente.getInt("id_incidente");
                              String descIncidente;
 
                             switch (tipoIncidente) {
