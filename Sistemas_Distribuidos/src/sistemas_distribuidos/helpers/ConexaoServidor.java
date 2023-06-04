@@ -28,10 +28,10 @@ public class ConexaoServidor {
     static String[] clientesConectados = new String[5];
     static Integer count = 0;
     static ListarClientes cliente = new ListarClientes();
-    
-    public static void preencherClientesConectados(String[] clienteConectados){
+
+    public static void preencherClientesConectados(String[] clienteConectados) {
         cliente.preencherLista(clienteConectados);
-        
+
     }
 
     public static void ConectarCliente(Integer porta) throws JSONException {
@@ -77,6 +77,7 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "OK");
+                                    System.out.println("Enviando mensagem: " + json);
                                     pr.println(json);
                                     pr.flush();
                                 } else {
@@ -84,6 +85,8 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "Erro Generico");
+                                    System.out.println("Enviando mensagem: " + json);
+
                                     pr.println(json);
                                     pr.flush();
                                 }
@@ -108,6 +111,7 @@ public class ConexaoServidor {
                                     json.put("token", token);
                                     json.put("id", id);
                                     json.put("nome", nome);
+                                    System.out.println("Enviando mensagem: " + json);
 
                                     pr.println(json);
                                     pr.flush();
@@ -116,6 +120,8 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "Erro Generico");
+                                    System.out.println("Enviando mensagem: " + json);
+
                                     pr.println(json);
                                     pr.flush();
                                 }
@@ -133,6 +139,8 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "OK");
+                                    System.out.println("Enviando mensagem: " + json);
+
                                     pr.println(json);
                                     pr.flush();
                                 } else {
@@ -140,6 +148,8 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "Erro Generico");
+                                    System.out.println("Enviando mensagem: " + json);
+
                                     pr.println(json);
                                     pr.flush();
                                 }
@@ -158,6 +168,8 @@ public class ConexaoServidor {
                                     if (listaIncidentes.isEmpty()) {
                                         JSONArray jsonArrayIncidentes = new JSONArray();
                                         json.put("incidentes", jsonArrayIncidentes);
+                                        System.out.println("Enviando mensagem: " + json);
+
                                         pr.println(json);
                                         pr.flush();
 
@@ -177,6 +189,8 @@ public class ConexaoServidor {
                                             jsonArrayIncidentes.put(jsonIncidente);
                                         }
                                         json.put("incidentes", jsonArrayIncidentes);
+                                        System.out.println("Enviando mensagem: " + json);
+
                                         pr.println(json);
                                         pr.flush();
                                     }
@@ -184,10 +198,108 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "Erro Generico");
+                                    System.out.println("Enviando mensagem: " + json);
+
                                     pr.println(json);
                                     pr.flush();
                                 }
 
+                            }
+                            case 5 -> {
+                                PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                try {
+                                    String token = mensagemFinal.getString("token");
+                                    Integer id = mensagemFinal.getInt("id");
+                                    Boolean tokenValidado = CriarToken.verificarToken(id, token);
+                                    if (tokenValidado) {
+                                        List<Incidente> listaIncidentes = ValidacaoMensagemServidor.validacaoBuscaIncidentesUsuario(id);
+                                        JSONObject json = new JSONObject();
+                                        json.put("operacao", operacao);
+                                        json.put("status", "OK");
+                                        if (listaIncidentes.isEmpty()) {
+                                            JSONArray jsonArrayIncidentes = new JSONArray();
+                                            json.put("incidentes", jsonArrayIncidentes);
+                                            System.out.println("Enviando mensagem: " + json);
+
+                                            pr.println(json);
+                                            pr.flush();
+
+                                        } else {
+                                            JSONArray jsonArrayIncidentes = new JSONArray();
+                                            for (Incidente incidente : listaIncidentes) {
+                                                JSONObject jsonIncidente = new JSONObject();
+                                                jsonIncidente.put("tipo_incidente", incidente.getTipoIncidente());
+                                                jsonIncidente.put("data", incidente.getData());
+                                                jsonIncidente.put("hora", incidente.getHora());
+                                                jsonIncidente.put("cidade", incidente.getCidade());
+                                                jsonIncidente.put("bairro", incidente.getBairro());
+                                                jsonIncidente.put("rua", incidente.getRua());
+                                                jsonIncidente.put("estado", incidente.getEstado());
+                                                jsonIncidente.put("id_incidente", incidente.getId());
+
+                                                jsonArrayIncidentes.put(jsonIncidente);
+                                            }
+                                            json.put("incidentes", jsonArrayIncidentes);
+                                            System.out.println("Enviando mensagem: " + json);
+
+                                            pr.println(json);
+                                            pr.flush();
+                                        }
+
+                                    } else {
+                                        JSONObject json = new JSONObject();
+                                        json.put("operacao", operacao);
+                                        json.put("status", "Erro Generico");
+                                        System.out.println("Enviando mensagem: " + json);
+
+                                        pr.println(json);
+                                        pr.flush();
+                                    }
+                                } catch (Exception e) {
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "Erro Generico");
+                                    System.out.println("Enviando mensagem: " + json);
+
+                                    pr.println(json);
+                                    pr.flush();
+                                }
+
+                            }
+                            case 6 -> {
+                                PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                try {
+                                    String token = mensagemFinal.getString("token");
+                                    Integer id = mensagemFinal.getInt("id");
+                                    Integer id_incidente = mensagemFinal.getInt("id_incidente");
+                                    Boolean tokenValidado = CriarToken.verificarToken(id, token);
+                                    Boolean resultado = ValidacaoMensagemServidor.validacaoExcluirIncidente(id_incidente);
+                                    if (tokenValidado && resultado) {
+                                        JSONObject json = new JSONObject();
+                                        json.put("operacao", operacao);
+                                        json.put("status", "OK");
+                                        System.out.println("Enviando mensagem: " + json);
+
+                                        pr.println(json);
+                                        pr.flush();
+                                    } else {
+                                        JSONObject json = new JSONObject();
+                                        json.put("operacao", operacao);
+                                        json.put("status", "Erro Generico");
+                                        System.out.println("Enviando mensagem: " + json);
+
+                                        pr.println(json);
+                                        pr.flush();
+                                    }
+                                } catch (Exception e) {
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "Erro Generico");
+                                    System.out.println("Enviando mensagem: " + json);
+
+                                    pr.println(json);
+                                    pr.flush();
+                                }
                             }
                             case 7 -> {
                                 String data = mensagemFinal.getString("data");
@@ -204,6 +316,8 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "OK");
+                                    System.out.println("Enviando mensagem: " + json);
+
                                     pr.println(json);
                                     pr.flush();
                                 } else {
@@ -211,6 +325,8 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "Erro Generico");
+                                    System.out.println("Enviando mensagem: " + json);
+
                                     pr.println(json);
                                     pr.flush();
                                 }
@@ -228,6 +344,8 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "OK");
+                                    System.out.println("Enviando mensagem: " + json);
+
                                     pr.println(json);
                                     pr.flush();
                                 } else {
@@ -235,6 +353,8 @@ public class ConexaoServidor {
                                     JSONObject json = new JSONObject();
                                     json.put("operacao", operacao);
                                     json.put("status", "Erro Generico");
+                                    System.out.println("Enviando mensagem: " + json);
+
                                     pr.println(json);
                                     pr.flush();
                                 }

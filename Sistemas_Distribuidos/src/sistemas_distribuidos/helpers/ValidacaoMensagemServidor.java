@@ -149,7 +149,6 @@ public class ValidacaoMensagemServidor extends Thread {
             Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
             Statement statement = conexao.createStatement();
 
-
             if (usuarioExiste) {
                 String sqlEdicaoDados = "UPDATE `Usuario` SET Nome = '" + nome + "', Email = '" + email + "', Senha = '" + senha + "' WHERE IDUsuario = " + id;
                 System.out.println(sqlEdicaoDados);
@@ -250,6 +249,72 @@ public class ValidacaoMensagemServidor extends Thread {
         }
 
         return incidentes;
+
+    }
+
+    public static List<Incidente> validacaoBuscaIncidentesUsuario(Integer id) {
+        List<Incidente> incidentes = new ArrayList<>();
+
+        String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
+        String usuario = "root";
+        String senhaBanco = "";
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
+            Statement statement = conexao.createStatement();
+            String sql = "SELECT * FROM incidentes WHERE `IDUsuario` LIKE '" + id + "'";
+            System.out.println(sql);
+            ResultSet resultadosQuery = statement.executeQuery(sql);
+
+            while (resultadosQuery.next()) {
+                Integer tipoIncidente = resultadosQuery.getInt("Tipo_Incidente");
+                String hora = resultadosQuery.getString("Hora_Incidente");
+                String rua = resultadosQuery.getString("Rua");
+                String bairro = resultadosQuery.getString("Bairro");
+                String data = resultadosQuery.getString("Data_Incidente");
+                String cidade = resultadosQuery.getString("Cidade");
+                String estado = resultadosQuery.getString("Estado");
+                int idUser = resultadosQuery.getInt("IDUsuario");
+                int idIncidente = resultadosQuery.getInt("IDIncidente");
+
+                Incidente incidente = new Incidente(tipoIncidente, data, hora, cidade, bairro, rua, estado, idUser);
+                incidente.setId(idIncidente);
+                incidentes.add(incidente);
+
+            }
+
+            return incidentes;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return incidentes;
+
+    }
+
+    public static Boolean validacaoExcluirIncidente(Integer id_incidente) {
+
+        String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
+        String usuario = "root";
+        String senhaBanco = "";
+        
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
+
+            Statement statement = conexao.createStatement();
+            String sql = "Delete from `Incidentes` where `IDIncidente` = "+ id_incidente;
+            System.out.println(sql);
+            statement.execute(sql);
+           return true;
+           
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
 
     }
 
