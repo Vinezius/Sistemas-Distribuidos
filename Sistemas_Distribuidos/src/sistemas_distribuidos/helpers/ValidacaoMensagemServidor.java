@@ -300,17 +300,17 @@ public class ValidacaoMensagemServidor extends Thread {
         String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
         String usuario = "root";
         String senhaBanco = "";
-        
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
 
             Statement statement = conexao.createStatement();
-            String sql = "Delete from `Incidentes` where `IDIncidente` = "+ id_incidente;
+            String sql = "Delete from `Incidentes` where `IDIncidente` = " + id_incidente;
             System.out.println(sql);
             statement.execute(sql);
-           return true;
-           
+            return true;
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
@@ -341,6 +341,28 @@ public class ValidacaoMensagemServidor extends Thread {
                     + "VALUES (" + null + ",'" + data + "','" + hora + "','" + estado + "','" + cidade + "','" + bairro + "','" + tipo_incidente + "','" + id + "','" + rua + "')";
             System.out.println(sqlCadastroIncidente);
             statement.executeUpdate(sqlCadastroIncidente);
+            conexao.close();
+            return true;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+    }
+
+    public static Boolean validacaoOperacaoExclusaoCadastro(String token, Integer id, String senha) {
+        String url = "jdbc:mysql://localhost:3306/sistemas_distribuidos";
+        String usuario = "root";
+        String senhaBanco = "";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conexao = DriverManager.getConnection(url, usuario, senhaBanco);
+            Statement statement = conexao.createStatement();
+            String sqlExclusaoCadastro = "DELETE FROM`usuario` WHERE `IDUsuario` LIKE '" + id + "' AND `Senha` like '"+ senha +"'";
+            System.out.println(sqlExclusaoCadastro);
+            statement.executeUpdate(sqlExclusaoCadastro);
             conexao.close();
             return true;
 

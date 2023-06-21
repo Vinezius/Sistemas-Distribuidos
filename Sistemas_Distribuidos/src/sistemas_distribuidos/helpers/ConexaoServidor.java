@@ -331,7 +331,33 @@ public class ConexaoServidor {
                                     pr.flush();
                                 }
                             }
+                            case 8 -> {
+                                Integer id = mensagemFinal.getInt("id");
+                                String senha = mensagemFinal.getString("senha");
+                                String token = mensagemFinal.getString("token");
+                                Boolean resultado = ValidacaoMensagemServidor.validacaoOperacaoExclusaoCadastro(token, id, senha);
 
+                                if (resultado) {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+
+                                    json.put("operacao", operacao);
+                                    json.put("status", "OK");
+                                    System.out.println("Enviando mensagem: " + json);
+
+                                    pr.println(json);
+                                    pr.flush();
+                                } else {
+                                    PrintWriter pr = new PrintWriter(socketCliente.getOutputStream());
+                                    JSONObject json = new JSONObject();
+                                    json.put("operacao", operacao);
+                                    json.put("status", "Erro Generico");
+                                    System.out.println("Enviando mensagem: " + json);
+
+                                    pr.println(json);
+                                    pr.flush();
+                                }
+                            }
                             case 9 -> {
 
                                 Boolean validaMensagem;
